@@ -1,0 +1,219 @@
+
+
+<ul class="menu-items">
+    <li class="m-t-30 {% if 'dashboard' == active_page %} active {% endif %}">
+        <a href="{{ url_for('dashboard.index') }}">
+            <span class="title">Accueil</span>
+        </a>
+        <span class="icon-thumbnail "><i class="fa fa-dashboard"></i></span>
+    </li>
+    <li class="{% if 'rapport' == active_page %} open active {% endif %}">
+        <a href="javascript:;">
+            <span class="title">Rapport</span>
+            <span class=" arrow"></span>
+        </a>
+        <span class="icon-thumbnail "><i class="fa fa-bar-chart"></i></span>
+        <ul class="sub-menu">
+            <li class="">
+                <a href="">Ventes</a>
+                <span class="icon-thumbnail">Ve</span>
+            </li>
+            <li class="">
+                <a href="#">Commandes</a>
+                <span class="icon-thumbnail">Co</span>
+            </li>
+{#            <li class="">#}
+{#                <a href="{{ url_for('rapport_stock.index') }}">Inventaire du stock</a>#}
+{#                <span class="icon-thumbnail">Is</span>#}
+{#            </li>#}
+        </ul>
+    </li>
+    <li class="{% if active_page in ['enregistrement'] %} open active {% endif %}">
+        <a href="javascript:;">
+            <span class="title">Ventes</span>
+            <span class=" arrow"></span>
+        </a>
+        <span class="icon-thumbnail"><i class="pg-plus_circle"></i></span>
+        <ul class="sub-menu">
+              <li class="">
+                  <a href="{{ url_for('vente.index') }}">Ventes</a>
+                  <span class="icon-thumbnail">Ve</span>
+              </li>
+              <li class="">
+                  <a href="#">Commandes</a>
+                  <span class="icon-thumbnail">Co</span>
+              </li>
+        </ul>
+    </li>
+
+    <li class="{% if active_page in ['client'] %} open active {% endif %}">
+        <a href="javascript:;">
+            <span class="title">Clients</span>
+            <span class=" arrow"></span>
+        </a>
+        <span class="icon-thumbnail "><i class="fa fa-users"></i></span>
+        <ul class="sub-menu">
+            <li class="">
+                <a href="{{ url_for('categorie.index') }}">Groupe de client</a>
+                <span class="icon-thumbnail">Gc</span>
+            </li>
+            <li class="">
+                <a href="{{ url_for('customer.index') }}">Repertoire</a>
+                <span class="icon-thumbnail">Ca</span>
+            </li>
+        </ul>
+    </li>
+    <li class="{% if active_page in ['article', 'recette', 'matiere'] %} open active {% endif %}">
+        <a href="javascript:;">
+            <span class="title">Articles</span>
+            <span class=" arrow"></span>
+        </a>
+        <span class="icon-thumbnail "><i class="fa fa-file-text"></i></span>
+        <ul class="sub-menu">
+            <li class="">
+                <a href="{{ url_for('item.index') }}">Produits</a>
+                <span class="icon-thumbnail">Pr</span>
+            </li>
+            <li class="">
+                <a href="{{ url_for('recette.index') }}">Recettes</a>
+                <span class="icon-thumbnail">Re</span>
+            </li>
+            <li class="">
+                <a href="{{ url_for('matiere.index') }}">Matiere 1ere</a>
+                <span class="icon-thumbnail">Ma</span>
+            </li>
+        </ul>
+    </li>
+
+{#    <li class="{% if active_page in ['matiere', 'recette', 'course'] %} open active {% endif %}">#}
+{#        <a href="javascript:;">#}
+{#            <span class="title">Production</span>#}
+{#            <span class=" arrow"></span>#}
+{#        </a>#}
+{#        <span class="icon-thumbnail"><i class="pg-note"></i></span>#}
+{#        <ul class="sub-menu">#}
+{#            <li class="">#}
+{#                <a href="{{ url_for('matiere.index') }}">Matieres 1ere</a>#}
+{#                <span class="icon-thumbnail">Ma</span>#}
+{#            </li>#}
+{#            <li class="">#}
+{#                <a href="{{ url_for('recette.index') }}">Recettes</a>#}
+{#                <span class="icon-thumbnail">Re</span>#}
+{#            </li>#}
+{#            <li class="">#}
+{#                <a href="{{ url_for('inventory_prod.index') }}">Historique Inv. du stock</a>#}
+{#                <span class="icon-thumbnail">Hi</span>#}
+{#            </li>#}
+{#            <li class="">#}
+{#                <a href="{{ url_for('course.index') }}">Liste des courses</a>#}
+{#                <span class="icon-thumbnail">Lc</span>#}
+{#            </li>#}
+{#        </ul>#}
+{#    </li>#}
+    <li class="{% if active_page in ['employe'] %} open active {% endif %}">
+        <a href="javascript:;">
+            <span class="title">Employés</span>
+            <span class=" arrow"></span>
+        </a>
+        <span class="icon-thumbnail"><i class="pg-note"></i></span>
+        <ul class="sub-menu">
+            <li class="">
+                <a href="#">Departement</a>
+                <span class="icon-thumbnail">De</span>
+            </li>
+            <li class="">
+                <a href="{{ url_for('user.index') }}">Repertoire</a>
+                <span class="icon-thumbnail">Re</span>
+            </li>
+
+        </ul>
+    </li>
+    <li class="{% if active_page in ['fournisseur', 'bcmd', 'story_inventory', 'transfert', 'vente'] %} open active {% endif %}">
+        <a href="javascript:;">
+            <span class="title">Stock</span>
+            <span class=" arrow"></span>
+        </a>
+        <span class="icon-thumbnail"><i class="fa fa-file-archive-o"></i></span>
+        <ul class="sub-menu">
+            <li class="">
+                <a href="{{ url_for('transfert.index') }}">Transfert de stock</a>
+                <span class="icon-thumbnail">Ts</span>
+            </li>
+            <li class="">
+                <a href="#">Demande de stock</a>
+                <span class="icon-thumbnail">Ds</span>
+            </li>
+            <li class="">
+                <a href="{{ url_for('bcmd.index')}}">Bon de commande</a>
+                <span class="icon-thumbnail">Bc</span>
+            </li>
+
+            <li class="">
+                <a href="#">Ajustement de stock</a>
+                <span class="icon-thumbnail">As</span>
+            </li>
+            <li class="">
+                <a href="{{ url_for('inventory.index') }}">Historique d'inventaire</a>
+                <span class="icon-thumbnail">Hi</span>
+            </li>
+            <li class="">
+                <a href="#">Valorisation des stocks</a>
+                <span class="icon-thumbnail">Vs</span>
+            </li>
+            <li class="">
+                <a href="#">Courses</a>
+                <span class="icon-thumbnail">Co</span>
+            </li>
+            <li class="">
+                <a href="{{ url_for('four.index')}}">Fournisseurs</a>
+                <span class="icon-thumbnail">Fo</span>
+            </li>
+        </ul>
+    </li>
+    <li class="{% if active_page in ['parametre', 'general', 'magpdv', 'categorie'] %} open active {% endif %}">
+        <a href="javascript:;">
+            <span class="title">Paramètre</span>
+            <span class=" arrow"></span>
+        </a>
+        <span class="icon-thumbnail"><i class="pg-settings"></i></span>
+        <ul class="sub-menu">
+            <li class="">
+                <a href="{{ url_for('param_compte.index') }}">Comptes</a>
+                <span class="icon-thumbnail">Co</span>
+            </li>
+            <li class="">
+                <a href="{{ url_for('param_mag.index') }}">Magasins</a>
+                <span class="icon-thumbnail">Ma</span>
+            </li>
+            <li class="">
+                <a href="#">Point de vente</a>
+                <span class="icon-thumbnail">Pv</span>
+            </li>
+            <li class="">
+                <a href="{{ url_for('composant.index') }}">Composants</a>
+                <span class="icon-thumbnail">Co</span>
+            </li>
+            <li class="">
+                <a href="#">Config</a>
+                <span class="icon-thumbnail">Cg</span>
+            </li>
+        </ul>
+    </li>
+    <li class="{% if active_page in ['application'] %} open active {% endif %}">
+        <a href="javascript:;">
+            <span class="title">Applications</span>
+            <span class=" arrow"></span>
+        </a>
+        <span class="icon-thumbnail"><i class="pg-server_hard"></i></span>
+        <ul class="sub-menu">
+            <li class="">
+                <a href="#">Tarif et Abonnement</a>
+                <span class="icon-thumbnail">Ta</span>
+            </li>
+            <li class="">
+                <a href="#">Catalogue</a>
+                <span class="icon-thumbnail">Ca</span>
+            </li>
+        </ul>
+    </li>
+</ul>

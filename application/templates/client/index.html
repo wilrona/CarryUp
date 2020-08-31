@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% set active_page = "client" %}
+{% set submenu = "repertoire" %}
+{% set title = 'Clients' %}
+
+{% block title %} {{ super() }} {{ title }} {% endblock %}
+{% block breadcrumb_header %} {{ title }} {% endblock %}
+
+{% block layout_content %}
+
+    <div class="row">
+        <div class="col-lg-2">
+            {% include 'includes/nav_client.html' %}
+        </div>
+        <div class="col-lg-10">
+            {% include 'includes/flash_message.html' %}
+
+            <div id="card_client" class="card card-transparent" data-edit="{{ url_for('customer.edit') }}" data-list="{{ url_for('api_customer.index', compte_id=compte.id) }}">
+
+            </div>
+
+        </div>
+    </div>
+
+{% endblock %}

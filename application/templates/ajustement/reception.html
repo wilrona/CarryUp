@@ -1,0 +1,166 @@
+{% extends 'base.html' %}
+
+{% set active_page = "stock" %}
+{% set submenu = "transfert" %}
+{% set title = 'Reception ordre de transfert' %}
+
+{% block title %} {{ super() }} {{ title }} {% endblock %}
+{% block breadcrumb_header %} {{ title }} {% endblock %}
+
+{% block layout_content %}
+
+    <div class="row">
+        <div class="col-lg-2">
+            {% include 'includes/nav_document.html' %}
+        </div>
+        <div class="col-md-8">
+
+          <div class="sticky-top padding-10 bg-white">
+              <ul class="nav justify-content-end">
+                  <li class="nav-item">
+                    <a href="#" class="btn btn-complete btn-xs" id='submit_all'>
+                        Marque tout recu
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a href="{{ url_for('transfert.view', data_id=data_id) }}" class="btn btn-default btn-xs" id='submit_all'>
+                        Retour
+                    </a>
+                  </li>
+
+                  <li class="nav-item">
+                      <a href="#" class="btn btn-primary btn-xs" id='submit'>
+                          Reception
+                      </a>
+                  </li>
+              </ul>
+          </div>
+
+          <div class="card card-transparent form-fieldset">
+              <form method="post" action=""  class="form-horizontal" autocomplete="off" id="submitForm">
+                <div class="card-body no-padding">
+                  <div class="lead m-b-20 m-t-10">
+                   Details
+                  </div>
+                  <div class="form-table form-table--with-spacing" >
+                    <div class="form-group row">
+                      <label class="col-md-3 control-label form-field__label">Reference</label>
+                      <div class="col-md-9 form-field__content">
+                        <span class="form-link--with-spacing">{{ data.reference }}</span>
+                      </div>
+                    </div>
+
+                  </div>
+
+                  <div class="form-table form-table--with-spacing" >
+                    <div class="form-group row">
+                      <label class="col-md-3 control-label form-field__label">Magasin d'origine</label>
+                      <div class="col-md-9 form-field__content">
+                        <input type="text" value="{{ data.magasin_origine.name }}" readonly class="form-control-plaintext full-width form-field__input">
+                      </div>
+                    </div>
+                    <div class="form-group row">
+                      <label class="col-md-3 control-label form-field__label">Magasin destinataire</label>
+                      <div class="col-md-9 form-field__content">
+                        <input type="text" value="{{ data.magasin_origine.name }}" readonly class="form-control-plaintext full-width form-field__input">
+                      </div>
+                    </div>
+
+                  </div>
+
+                </div>
+              </form>
+
+                <div class="lead m-b-20 m-t-30">
+                  Reception des articles
+                </div>
+                <div class="mh-370">
+
+                  <table class="table">
+                    <thead>
+                      <tr>
+                        <th style="width:30%">Articles</th>
+                        <th class="text-right">Commandée</th>
+                        <th class="text-right">Reçue</th>
+                        <th class="text-right" style="width:20%">A recevoir</th>
+                      </tr>
+                    </thead>
+                  </table>
+
+                  <form action="" method="post" id="reception">
+                      <input type="hidden" name="all_reception" value="0">
+
+                    {% for item_list in data.ligne_data %}
+
+                      <table class="table table-line">
+                        <tbody>
+                            <tr>
+                              <td style="width:30%">
+                                {{ item_list.article_id.name }} -
+                                <small>{{ item_list.variante_id.name }}</small>
+                              </td>
+                              <td class="text-right quantite">
+                                {{ item_list.quantite }}
+                              </td>
+                              <td class="text-right prix_achat">
+                                {{ item_list.quantite_recu }}
+                              </td>
+                              <td class="text-right no-padding-r" style="width:20%">
+                                <input type="text" class="form-control numeric text-right" name="a_recevoir" value="0" data-a-sep=" " data-v-min="0" data-v-max="{{ item_list.quantite - item_list.quantite_recu }}">
+                                <input type="hidden" name="index" value="{{ loop.index - 1 }}">
+                                <input type="hidden" name="item_id" value="{{ item_list.article_id.id }}">
+                              </td>
+                            </tr>
+                        </tbody>
+                      </table>
+
+                    {% endfor %}
+
+                  </form>
+
+
+                </div>
+          </div>
+
+
+
+        </div>
+    </div>
+
+
+{% endblock %}
+
+{% block footer_script %}
+
+    <script type="text/javascript">
+
+        $(document).ready(function() {
+
+            $('#submit').on('click', function(e){
+                e.preventDefault();
+                $.each($('.numeric'), function(){
+                  $curVal = $(this).val();
+                  $curVal = $curVal.split(' ');
+                  $curVal = $curVal.join('');
+                  $(this).val($curVal);
+                })
+                $('#reception').submit();
+            });
+
+            $('#submit_all').on('click', function(e){
+                e.preventDefault();
+                $.each($('.numeric'), function(){
+                  $curVal = $(this).val();
+                  $curVal = $curVal.split(' ');
+                  $curVal = $curVal.join('');
+                  $(this).val($curVal);
+                })
+                $("input[name='all_reception']").val('1');
+                $('#reception').submit();
+            });
+
+        });
+
+    </script>
+
+{% endblock %}

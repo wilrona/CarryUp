@@ -1,0 +1,12 @@
+<div id="sidebar">
+    <div class="panel">
+        <a href="{{ url_for('item.index') }}" class="list-group-item {% if submenu == 'item' %}active{% endif %}">
+          Catalogue d'article
+        </a>
+    </div>
+    <div class="panel">
+        <a href="{{ url_for('cat.index') }}" class="list-group-item {% if submenu == 'categorie' %}active{% endif %}">
+          Categorie d'article
+        </a>
+    </div>
+</div>

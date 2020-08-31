@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% set active_page = "client" %}
+{% set submenu = "groupe" %}
+{% set title = 'Groupe de client' %}
+
+{% block title %} {{ super() }} {{ title }} {% endblock %}
+{% block breadcrumb_header %} {{ title }} {% endblock %}
+
+{% block layout_content %}
+<div class="row">
+    <div class="col-lg-2">
+        {% include 'includes/nav_client.html' %}
+    </div>
+    <div class="col-lg-10">
+        {% include 'includes/flash_message.html' %}
+
+        <div id="card_groupe" class="card card-transparent" data-edit="{{ url_for('groupe_client.edit') }}" data-list="{{ url_for('api_customer.groupe', compte_id=compte.id) }}">
+
+        </div>
+
+    </div>
+</div>
+
+{% endblock %}

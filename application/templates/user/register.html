@@ -1,0 +1,170 @@
+{% extends "base.html" %}
+
+
+{% block title %} {{ super() }} Inscription {% endblock %}
+
+{% block head_script %}
+
+    <script type="text/javascript">
+        window.onload = function()
+        {
+            // fix for windows 8
+            if (navigator.appVersion.indexOf("Windows NT 6.2") != -1)
+                document.head.innerHTML += '<link rel="stylesheet" type="text/css" href="/static/pages/css/windows.chrome.fix.css" />'
+        }
+    </script>
+
+{% endblock %}
+
+{% block body %}
+    <div class="register-container sm-p-t-30">
+        <div class="d-flex justify-content-center flex-column m-t-50 m-b-50">
+            <img src="/static/img/logo.png" alt="logo" data-src="/static/img/logo.png" data-src-retina="/static/img/logo_2x.png" width="78" height="22">
+            <h3>Carry Up vous permet de gerer votre stock et vos ventes en toute simplicité </h3>
+            <p>
+                <a href="{{ url_for('home.inscription') }}" class="text-info">Creer votre compte Carry UP</a> en toute simplicité afin de bénéficier des fonctionnalités de cette plateforme.
+            </p>
+            <form id="form-project" role="form" autocomplete="off" novalidate="novalidate" method="post">
+                {{ form.hidden_tag() }}
+                <p>Information de l'entreprise</p>
+
+                <div class="form-group-attached">
+                    {% for message in form.name.errors %}
+                        <div class="error">{{ message }}</div>
+                    {% endfor %}
+                    <div class="form-group form-group-default {% if form.name.errors %} has-error {% endif %}" aria-required="true">
+                        {{ form.name.label() }}
+                        {{ form.name(class_='form-control', placeholder='Nom de l\'entreprise') }}
+
+                    </div>
+                    <div class="row clearfix">
+                        <div class="col-md-6">
+                            <div class="form-group form-group-default" aria-required="true">
+                                {{ form.adresse_un.label() }}
+                                {{ form.adresse_un(class_='form-control') }}
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group form-group-default">
+                                {{ form.adresse_deux.label() }}
+                                {{ form.adresse_deux(class_='form-control') }}
+                            </div>
+                        </div>
+                    </div>
+
+                    {% for message in form.pays.errors %}
+                        <div class="error">{{ message }}</div>
+                    {% endfor %}
+                    <div class="form-group form-group-default form-group-default-select2 {% if form.pays.errors %} has-error {% endif %}" aria-required="true">
+                        {{ form.pays.label() }}
+                        <select name="pays" class="full-width" data-placeholder="Pays de residence de l'entreprise" data-init-plugin="select2">
+                            <option value=""></option>
+                            {% for pays in pays_list %}
+                                <option value="{{ pays.alpha_2 }}" {% if form.pays.data == pays.alpha_2 %} selected {% endif %}>{{ pays.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="row clearfix">
+                        <div class="col-md-6">
+                            {% for message in form.ville.errors %}
+                                <div class="error">{{ message }}</div>
+                            {% endfor %}
+                        </div>
+                        <div class="col-md-6">
+                            {% for message in form.phone.errors %}
+                                <div class="error">{{ message }}</div>
+                            {% endfor %}
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group form-group-default {% if form.ville.errors %} has-error {% endif %}" aria-required="true">
+                                {{ form.ville.label() }}
+                                {{ form.ville(class_='form-control', placeholder='Ville de residence') }}
+                            </div>
+
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group form-group-default {% if form.phone.errors %} has-error {% endif %}">
+                                {{ form.phone.label() }}
+                                {{ form.phone(class_='form-control numeric', placeholder='No Telephone', **{ 'data-a-sep': " ", 'data-v-min': "0", 'data-v-max': "999999999999"  }) }}
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <p class="m-t-30">Information de connexion</p>
+
+                <div class="form-group-attached">
+                    {% for message in form.email.errors %}
+                        <div class="error">{{ message }}</div>
+                    {% endfor %}
+                    <div class="form-group form-group-default {% if form.email.errors %} has-error {% endif %}">
+                        {{ form.email.label() }}
+                        {{ form.email(class_='form-control') }}
+                    </div>
+                    <div class="row clearfix">
+                        <div class="col-md-6 ">
+                            <div class="p-r-10">
+                                {% for message in form.password.errors %}
+                                    <div class="error">{{ message }}</div>
+                                {% endfor %}
+                            </div>
+
+                        </div>
+                        <div class="col-md-6">
+                            <div class="p-l-10">
+                                {% for message in form.retype_password.errors %}
+                                    <div class="error">{{ message }}</div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+
+                            <div class="form-group form-group-default {% if form.password.errors %} has-error {% endif %}" aria-required="true">
+                                {{ form.password.label() }}
+                                {{ form.password(class_='form-control') }}
+                            </div>
+
+                        </div>
+                        <div class="col-md-6">
+
+                            <div class="form-group form-group-default {% if form.retype_password.errors %} has-error {% endif %}">
+                                {{ form.retype_password.label() }}
+                                {{ form.retype_password(class_='form-control') }}
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <br>
+                <div class="pull-left">
+                    <div class="checkbox check-success  ">
+                        <input type="checkbox" value="1" id="checkbox-agree" required>
+                        <label for="checkbox-agree">Je certifie par la présente que les informations ci-dessus sont vraies et exactes
+                        </label>
+                    </div>
+                </div>
+                <br>
+                <button class="btn btn-success m-t-10" disabled type="submit" id="submit">Valider l'inscription</button>
+                <a href="{{  url_for('home.index') }}" class="btn btn-default m-t-10"><i class="pg-power"></i> Retour à la connexion</a>
+            </form>
+        </div>
+    </div>
+
+
+
+
+{% endblock %}
+
+{% block footer_script %}
+    <script>
+        $('#checkbox-agree').on('click', function(e){
+            e.preventDefault;
+            if($(this).prop('checked')){
+                $('#submit').attr('disabled', false)
+            }else{
+                $('#submit').attr('disabled', true)
+            }
+        })
+    </script>
+
+{% endblock %}

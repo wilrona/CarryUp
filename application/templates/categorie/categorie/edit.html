@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+
+{% set active_page = "article" %}
+{% set submenu = "categorie" %}
+{% set title = 'Editer une categorie' %}
+{% set label_name = 'Nom de la categorie' %}
+
+{% block title %} {{ super() }} {{ title }} {% endblock %}
+{% block breadcrumb_header %} {{ title }} {% endblock %}
+
+{% block layout_content %}
+
+    <div class="row">
+      <div class="col-lg-2">
+          {% include 'includes/nav_article.html' %}
+      </div>
+        <div class="col-md-8">
+
+          <div class="sticky-top m-b-20 padding-10 bg-white">
+              <ul class="nav justify-content-end">
+
+
+                  <li class="nav-item">
+                      <a class="btn btn-secondary" href="{{ url_for('cat.index') }}">
+                          Annuler
+                      </a>
+                  </li>
+                  <li class="nav-item">
+                      <a href="#" class="btn btn-primary submit">
+                          Enregistrer
+                      </a>
+                  </li>
+              </ul>
+          </div>
+
+          <div class="card card-transparent form-fieldset">
+            <form method="post" action=""  class="form-horizontal" autocomplete="off" id="submitForm">
+
+                    <div class="card-body no-padding">
+
+                            <div class="lead m-b-20 m-t-10">
+                                {{ title }}
+                            </div>
+
+                            {% for fielName, errorMessages in form.errors.items() %}
+                                {% for err in errorMessages %}
+                                    <div class="col-md-12 error m-b-20">{{ err }}</div>
+                                {% endfor %}
+                            {% endfor %}
+
+                            {{ form.hidden_tag() }}
+
+                            <div class="form-table form-table--with-spacing" >
+
+                                  <div class="form-group row{% if form.name.errors %} has-error {% endif %}">
+
+                                      {{ form.name.label(label_name, class_='col-md-3 control-label form-field__label') }}
+                                      <div class="col-md-9">
+                                          {{ form.name(class_='form-control form-field__input') }}
+                                      </div>
+                                  </div>
+
+                            </div>
+
+                    </div>
+
+            </form>
+        </div>
+    </div>
+
+
+{% endblock %}

@@ -1,0 +1,240 @@
+{% extends 'base.html' %}
+
+{% set active_page = "stock" %}
+{% set submenu = "transfert" %}
+{% set title = 'Details ordre de transfert' %}
+
+{% block title %} {{ super() }} {{ title }} {% endblock %}
+{% block breadcrumb_header %} {{ title }} {% endblock %}
+
+{% block layout_content %}
+
+    <div class="row">
+      <div class="col-lg-2">
+          {% include 'includes/nav_document.html' %}
+      </div>
+        <div class="col-md-8">
+
+          <div class="sticky-top padding-10 bg-white">
+              <ul class="nav justify-content-end">
+                  <li class="nav-item">
+                      <a href="{{ url_for('transfert.index') }}" class="btn btn-default">Retour</a>
+                  </li>
+                  {% if data.etat == 1 or data.etat == 2 %}
+                    <li class="nav-item">
+                        <a href="{{ url_for('transfert.reception', data_id=data.id) }}" class="btn btn-complete">Reception</a>
+                    </li>
+                  {% endif %}
+                  {% if data.etat == 0 %}
+                    <li class="nav-item">
+                        <a href="{{ url_for('transfert.active', data_id=data_id )}}" class="btn btn-primary">Valider</a>
+                    </li>
+                  {% endif %}
+                  {% if data.etat == 0 or data.etat == 1 %}
+                    <li class="nav-item">
+                        <a href="{{ url_for('transfert.edit', data_id=data_id)}}" class="btn btn-secondary">Editer</a>
+                    </li>
+                  {% endif %}
+                  {% if data.etat == 0 or data.etat == 1 or data.etat == 2 %}
+                  <li class="nav-item m-l-20">
+                      <a id="card-settings" class="btn dropdown-toggle" data-target="#" href="#" data-toggle="dropdown" aria-haspopup="true" role="button" aria-expanded="false">
+                        <i class="pg-menu_lv"></i>
+                      </a>
+                      <div class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="card-settings">
+                        {% if data.etat == 0 %}
+                            <a href="{{ url_for('transfert.delete', data_id=data_id) }}" class="dropdown-item">Supprimer</a>
+                        {% endif %}
+                        {% if data.etat == 1 %}
+                            <a href="{{ url_for('transfert.annulation', data_id=data_id) }}" class="dropdown-item">Annuler</a>
+                        {% endif %}
+                        {% if data.etat == 2 %}
+                            <a href="{{ url_for('transfert.annularticle', data_id=data_id) }}" class="dropdown-item">Annuler les articles restants</a>
+                        {% endif %}
+                      </div>
+                  </li>
+                  {% endif %}
+              </ul>
+          </div>
+
+          {% include 'includes/flash_message.html' %}
+
+          <div class="card card-transparent form-fieldset">
+              <form method="post" action=""  class="form-horizontal" autocomplete="off" id="submitForm">
+                <div class="card-body no-padding">
+
+                  <div class="lead m-b-20 m-t-10">
+                      Details
+                  </div>
+
+
+                  <div class="form-table form-table--with-spacing" >
+                    <div class="form-group row">
+                      <label class="col-md-3 control-label form-field__label">Reference</label>
+                      <div class="col-md-9 form-field__content">
+                        <span class="form-link--with-spacing">{{ data.reference }}</span>
+                      </div>
+                    </div>
+
+                  </div>
+
+                  <div class="row padding-10">
+                    <div class="col-md-6">
+                      Etat :<b>
+                        {% if data.etat == 0 %}
+                            Brouillon
+                        {% endif %}
+                        {% if data.etat == 1 %}
+                            En transit
+                        {% endif %}
+                        {% if data.etat == 2 %}
+                            Reception partielle
+                        {% endif %}
+                        {% if data.etat == 3 %}
+                            Terminée
+                        {% endif %}
+                        {% if data.etat == 4 %}
+                            Annuler
+                        {% endif %}
+                      </b>
+                    </div>
+                    <div class="col-md-6">
+
+                      <!-- Default height -->
+                      <div class="progress" style="height:10px;margin-bottom:0;">
+                          <div style="width: {% if recu %}{{ (recu * 100)/total }}{% else %}0{% endif %}%;" class="progress-bar progress-bar-success"></div>
+                      </div>
+                      <div>
+                          Reception {{ recu }} sur {{ total }}
+                      </div>
+
+                    </div>
+                  </div>
+
+                  <div class="form-table form-table--with-spacing" >
+                    <div class="form-group row">
+                      {{ form.magasin_origine.label(class_='col-md-3 control-label form-field__label') }}
+                      <div class="col-md-9 form-field__content">
+                        <input type="text" value="{{ data.magasin_origine.name }}" readonly class="form-control-plaintext full-width form-field__input">
+                      </div>
+                    </div>
+                    <div class="form-group row">
+                      {{ form.magasin_destina.label(class_='col-md-3 control-label form-field__label') }}
+                      <div class="col-md-9 form-field__content">
+                        <input type="text" value="{{ data.magasin_destina.name }}" readonly class="form-control-plaintext full-width form-field__input">
+                      </div>
+                    </div>
+
+                  </div>
+
+                  <div class="form-table form-table--with-spacing" >
+                    <div class="form-group row">
+                      {{ form.date_bon.label(class_='col-md-3 control-label form-field__label') }}
+                      <div class="col-md-9 form-field__content">
+                        <input type="text" value="{{ data.date_bon|format_date('%d/%m/%Y') }}" readonly class="form-control-plaintext full-width form-field__input">
+                      </div>
+                    </div>
+
+                  </div>
+
+                  <div class="lead m-b-20 m-t-50">
+                      Liste des articles
+                  </div>
+
+                  <div class="mh-370">
+
+                        <table class="table table-line table-condensed">
+                          <thead>
+                            <tr>
+                              <th style="width: 60%">Articles</th>
+                              <th class="text-right" style="widtgh:20%"  >Quantite</th>
+                              <th class="text-right" style="widtgh:20%" >Recu</th>
+                            </tr>
+                          </thead>
+                        </table>
+
+
+                        {% for item_list in data.ligne_data %}
+                          <table class="table table-line table-condensed articles-lines">
+                            <tbody>
+                                <tr>
+                                  <td style="width: 60%">
+                                    {{ item_list.article_id.name }} (<small>{{ item_list.variante_id.name }}</small>)
+                                  </td>
+                                  <td class="text-right" style="widtgh:20%">
+                                    {{ item_list.quantite }}
+                                  </td>
+                                  <td class="text-right" style="widtgh:20%">
+                                    {{ item_list.quantite_recu }}
+                                  </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                      {% endfor %}
+
+                </div>
+
+
+              </form>
+          </div>
+
+        </div>
+    </div>
+
+
+{% endblock %}
+
+{% block footer_script %}
+
+    <script type="text/javascript">
+
+        var refreshTotal = function refresh_total(){
+
+          $montant_total = 0;
+
+          $.each($('.montant'), function(){
+              $content = $(this).text();
+
+              $remove_decimal = $content.split(',');
+              $split_space = $remove_decimal[0].split(' ');
+
+              $content = $split_space.join('');
+
+              $montant_total += parseInt($content);
+          });
+
+          $('.montant_total').text($.number(parseInt($montant_total), 2, ',', ' '))
+
+        }
+
+
+        var initLigne = function initLigne(){
+
+          $.each($('.quantite'), function(){
+            var  $val = $(this);
+
+            var $prix = $val.next();
+            var montant = $val.parent().find('.montant');
+
+            $prix_val = $prix.text().split(" ");
+            $prix_val = $prix_val.join('');
+
+            $qte = $val.text().split(" ");
+            $qte = $qte.join('');
+            var $current_montant = parseInt($qte) * parseInt($prix_val);
+            montant.text($.number(parseInt($current_montant), 2, ',',' '));
+          });
+
+          refreshTotal();
+
+        }
+
+        $(document).ready(function() {
+
+              initLigne(); // initialisation des lignes de la commande
+
+        });
+
+
+        </script>
+
+{% endblock %}

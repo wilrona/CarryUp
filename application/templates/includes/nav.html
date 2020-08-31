@@ -1,0 +1,61 @@
+
+
+<ul class="menu-items">
+    <li class="m-t-30 {% if 'dashboard' == active_page %} active {% endif %}">
+        <a href="{{ url_for('dashboard.index') }}">
+            <span class="title">Accueil</span>
+        </a>
+        <span class="icon-thumbnail "><i class="fa fa-dashboard"></i></span>
+    </li>
+    <li class="{% if 'rapport' == active_page %} active {% endif %}">
+        <a href="#">
+            <span class="title">Rapport</span>
+        </a>
+        <span class="icon-thumbnail "><i class="fa fa-bar-chart"></i></span>
+    </li>
+    <li class="{% if 'vente' == active_page %} active {% endif %}">
+        <a href="{{ url_for('vente.index') }}">
+            <span class="title">Ventes</span>
+        </a>
+        <span class="icon-thumbnail"><i class="pg-plus_circle"></i></span>
+    </li>
+
+    <li class="{% if 'client' == active_page %} active {% endif %}">
+        <a href="{{ url_for('customer.index') }}">
+            <span class="title">Clients</span>
+        </a>
+        <span class="icon-thumbnail "><i class="fa fa-users"></i></span>
+    </li>
+    <li class="{% if 'article' == active_page %} active {% endif %}">
+        <a href="{{ url_for('item.index') }}">
+            <span class="title">Articles</span>
+        </a>
+        <span class="icon-thumbnail "><i class="fa fa-file-text"></i></span>
+    </li>
+
+    <li class="{% if 'employe' == active_page %}  active {% endif %}">
+        <a href="{{ url_for('user.index') }}">
+            <span class="title">Employés</span>
+        </a>
+        <span class="icon-thumbnail"><i class="pg-note"></i></span>
+
+    </li>
+    <li class="{% if 'stock' == active_page %} active {% endif %}">
+        <a href="{{ url_for('bcmd.index') }}">
+            <span class="title">Stock</span>
+        </a>
+        <span class="icon-thumbnail"><i class="fa fa-file-archive-o"></i></span>
+    </li>
+    <li class="{% if 'parametre' == active_page %} active {% endif %}">
+        <a href="{{ url_for('compte.index') }}">
+            <span class="title">Paramètre</span>
+        </a>
+        <span class="icon-thumbnail"><i class="pg-settings"></i></span>
+    </li>
+    <li class="{% if 'application' == active_page %} active {% endif %}">
+        <a href="#">
+            <span class="title">Applications</span>
+        </a>
+        <span class="icon-thumbnail"><i class="pg-server_hard"></i></span>
+    </li>
+</ul>

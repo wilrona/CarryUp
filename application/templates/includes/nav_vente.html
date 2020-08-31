@@ -1,0 +1,12 @@
+<div id="sidebar">
+    <div class="panel">
+        <a href="{{ url_for('vente.index') }}" class="list-group-item collapsed {% if submenu == 'vente' %} active {% endif %}">
+            Vente
+        </a>
+    </div>
+    <div class="panel">
+        <a href="#" class="list-group-item collapsed {% if submenu == 'commande' %} active {% endif %}">
+            Commande
+        </a>
+    </div>
+</div>

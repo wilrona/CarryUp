@@ -1,0 +1,22 @@
+<div id="sidebar">
+    <div class="panel">
+        <a href="{{ url_for('bcmd.index') }}" class="list-group-item collapsed {% if submenu == 'bcmd' %} active {% endif %}">
+            Bons de commande
+        </a>
+    </div>
+    <div class="panel">
+        <a href="{{ url_for('transfert.index') }}" class="list-group-item collapsed {% if submenu == 'transfert' %} active {% endif %}">
+            Ordres de transfert
+        </a>
+    </div>
+    <div class="panel">
+        <a href="{{ url_for('ajustement.index') }}" class="list-group-item collapsed {% if submenu == 'ajustement' %} active {% endif %}">
+           Ajustements des stocks
+        </a>
+    </div>
+    <div class="panel">
+        <a href="{{ url_for('four.index') }}" class="list-group-item collapsed {% if submenu == 'fournisseur' %} active {% endif %}">
+           Fournisseurs
+        </a>
+    </div>
+</div>

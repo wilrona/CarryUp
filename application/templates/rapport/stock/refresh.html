@@ -1,0 +1,63 @@
+<div id="load" style="
+                                        position: absolute;
+                                        top: 0;
+                                        left: 0;
+                                        right: 0;
+                                        bottom: 0;
+                                        background: rgba(0,0,0,0.4);
+                                        display: none;
+                                        color: #fff;
+                                        font-size: 20px;
+                                        font-weight: bold;
+                                        text-align: center;
+                                        line-height: 10;">Chargement</div>
+<table class="table">
+    <thead>
+    <tr>
+        <th style="width:25%">Articles/Recettes</th>
+        <th class="text-right" style="width:15%">Qte (piece)</th>
+        <th class="text-right" style="width:15%">Qte (gr)</th>
+        <th class="text-right" style="width:15%">Coût</th>
+    </tr>
+    </thead>
+    <tbody>
+
+    {% if list_course %}
+
+        {% for course in list_course %}
+        <tr>
+            <td>
+                {{ course['article'] }}
+            </td>
+            <td class="text-right">
+                {{ course['qte_piece'] }}
+            </td>
+            <td class="text-right">
+                {{ course['qte_gr'] }}
+            </td>
+            <td class="text-right">
+                {{ course['cout'] }}
+            </td>
+        </tr>
+        {% endfor %}
+        
+    {% else %}
+        
+        <tr>
+            <td colspan="4">
+                <h3 class="text-center">Aucune liste de course trouvée</h3>
+            </td>
+        </tr>
+        
+    {% endif %}
+    </tbody>
+</table>
+
+<table class="table" style="border:none">
+    <tfoot style="border: none;">
+    <tr>
+        <th colspan="3" class="text-right" style="width:50%"><b>Montant total</b></th>
+        <th class="text-right" style="width:15%">{{ total }}</th>
+    </tr>
+    </tfoot>
+</table>

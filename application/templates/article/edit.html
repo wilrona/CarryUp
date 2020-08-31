@@ -1,0 +1,174 @@
+{% extends 'base.html' %}
+
+{% set active_page = "article" %}
+{% set submenu = "item" %}
+{% set title = 'Editer un article' %}
+
+{% block title %} {{ super() }} {{ title }} {% endblock %}
+{% block breadcrumb_header %} {{ title }} {% endblock %}
+
+{% block layout_content %}
+
+    <div class="row">
+        <div class="col-lg-2">
+            {% include 'includes/nav_article.html' %}
+        </div>
+        <div class="col-md-8">
+          <div class="sticky-top padding-10 bg-white">
+              <ul class="nav justify-content-end">
+                  <li class="nav-item">
+                      <a class="btn btn-secondary btn-xs" href="{{ url_for('item.index') }}">
+                          Annuler
+                      </a>
+                  </li>
+                  <li class="nav-item">
+                      <a href="#" class="btn btn-primary submitItem btn-xs" id='submitItem'>
+                          Enregistrer
+                      </a>
+                  </li>
+              </ul>
+          </div>
+          <div class="card card-transparent form-fieldset">
+              <form method="post" action=""  class="form-horizontal" autocomplete="off" id="submitForm">
+
+                <div class="card-body no-padding">
+
+                  <div class="lead m-b-20 m-t-10">
+                      Details
+                  </div>
+
+                  {% for fielName, errorMessages in form.errors.items() %}
+                      {% for err in errorMessages %}
+                          <div class="col-md-12 error m-b-20">{{ err }}</div>
+                      {% endfor %}
+                  {% endfor %}
+
+                  {{ form.hidden_tag() }}
+
+                  <div class="form-table form-table--with-spacing" >
+                    <div class="form-group row{% if form.name.errors %} has-error {% endif %}">
+
+                        {{ form.name.label(class_='col-md-3 control-label form-field__label') }}
+                        <div class="col-md-9">
+                            {{ form.name(class_='form-control form-field__input') }}
+                        </div>
+                    </div>
+                    <div class="form-group row form-group-default-select2{% if form.categorie.errors %} has-error {% endif %}">
+
+                        {{ form.categorie.label(class_='col-md-3 control-label form-field__label') }}
+                        <div class="col-md-9">
+                            {{ form.categorie(class_='form-control full-width form-field__input', **{'data-init-plugin':'select2'}) }}
+                        </div>
+                    </div>
+                    <div class="form-group row{% if form.description.errors %} has-error {% endif %}">
+
+                        {{ form.description.label(class_='col-md-3 control-label form-field__label') }}
+                        <div class="col-md-9">
+                            {{ form.description(class_='form-control form-field__textarea', placeholder='Saisissez la description de vet article. Decrivez, par exemple, ses fonctionnalites, options et dimensions.') }}
+                        </div>
+                    </div>
+                    <div class="form-group row form-group-default-select2{% if form.magasin.errors %} has-error {% endif %}">
+
+                        {{ form.magasin.label(class_='col-md-3 control-label form-field__label') }}
+                        <div class="col-md-9 select_multiple">
+                          {{ form.magasin(class_='form-control full-width form-field__input', **{'data-placeholder': "Tous les points de vente", 'data-init-plugin':'select2'}) }}
+
+
+                        </div>
+                    </div>
+                  </div>
+
+                    <div class="checkbox check-success">
+                       {{ form.a_vendre(**{'id': 'a_vendre'}) }}
+                        <label for="a_vendre">L’article est disponible à la vente</label>
+                    </div>
+
+
+                    <div class="form-table form-table--with-spacing" >
+
+                        <div class="form-group row{% if form.prix_achat.errors %} has-error {% endif %}">
+
+                            {{ form.prix_achat.label(class_='col-md-3 control-label form-field__label') }}
+                            <div class="col-md-9">
+                                {{ form.prix_achat(class_='form-control form-field__input numeric_dec', **{ 'data-a-sep': " ", 'data-v-min': "0", 'data-v-max': "999999999999"}) }}
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="lead m-b-20 m-t-50">
+                        Article Compose
+                    </div>
+
+                    <div class="checkbox check-success">
+                        {{ form.type_article() }}
+                        {{ form.type_article.label('Cette article est un article compose') }}
+                    </div>
+
+                    <div id="card_articleCompose"
+                        data-id="{% if data_id %}{{data_id}}{% endif %}"
+                        allMatiere="{{ url_for('api_item.allArticle',  compte_id=compte.id, currentID=data_id) }}"
+                        setContent="{{form.produit_compose.data}}">
+                        >
+
+                    </div>
+
+                    {# <div id="card_articleCompose"
+                        compose="{% if form.type_article.data %}true{% else %}false{% endif %}"
+                        data-id="{% if data_id %}{{data_id}}{% endif %}"
+                        allMatiere="{{ url_for('api_item.allArticle',  compte_id=compte.id, currentID=data_id) }}"
+                        checkMatiere="{{ url_for('api_item.check') }}"
+                        urlVariante="{{ url_for('api_item.articleFini', compte_id=compte.id, item_id=data_id) }}">
+                    </div> #}
+
+                  {#  <div id="card_recetteAssocie"
+                        data-id="{% if data_id %}{{data_id}}{% endif %}"
+                        allMatiere="{{ url_for('api_item.allRecetteUnique',  compte_id=compte.id, currentID=data_id) }}"
+                        checkMatiere="{{ url_for('api_item.check') }}"
+                        urlVariante="{{ url_for('api_item.recettes', compte_id=compte.id, item_id=data_id) }}"
+                        setContent="{{form.matiere_premiere.data}}">
+                    </div> #}
+
+                    <hr>
+
+                    <div id="card_stockItem"
+                        data-id="{% if data_id %}{{data_id}}{% endif %}"
+                        urlVariante="{{ url_for('api_item.variante', compte_id=compte.id, item_id=data_id) }}"
+                        setContent="{{form.variantes.data}}">
+                    </div>
+
+
+
+
+
+                </div>
+
+              </form>
+          </div>
+        </div>
+    </div>
+
+
+{% endblock %}
+
+{% block footer_script %}
+
+    <script>
+        $(document).ready(function() {
+
+            $('#submitItem').on('click', function(e){
+              e.preventDefault();
+              $.each($('.numeric_dec'), function(){
+                $curVal = $(this).val();
+                $curVal = $curVal.split(' ');
+                $curVal = $curVal.join('');
+                $(this).val($curVal);
+              })
+              $('#submitForm').submit();
+            });
+
+        });
+
+      </script>
+
+  {% endblock %}

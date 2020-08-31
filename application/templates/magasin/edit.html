@@ -1,0 +1,115 @@
+{% extends 'base.html' %}
+
+
+{% set active_page = "parametre" %}
+{% set submenu = "magasin" %}
+{% set title = 'Editer un point de vente' %}
+
+{% block title %} {{ super() }} {{ title }} {% endblock %}
+{% block breadcrumb_header %} {{ title }} {% endblock %}
+
+
+{% block layout_content %}
+
+    <div class="row">
+        <div class="col-sm-2">
+            {% include 'includes/nav_param.html' %}
+        </div>
+        <div class="col-md-8">
+            <div class="sticky-top m-b-20 padding-10 bg-white">
+                <ul class="nav justify-content-end">
+                    
+                    <li class="nav-item">
+                        <a class="btn btn-secondary btn-xs" href="{{ url_for('pdv.index') }}">
+                            Annuler
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="btn btn-xs btn-primary submit">
+                            Enregistrer
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <div class="card card-transparent form-fieldset">
+                <form method="post" action="" class="form-horizontal" autocomplete="off" id="submitForm">
+                <div class="card-body no-padding">
+                            <div class="lead m-b-20 m-t-10">
+                                {{ title }}
+                            </div>
+
+                            {% for fielName, errorMessages in form.errors.items() %}
+                                {% for err in errorMessages %}
+                                    <div class="col-md-12 error m-b-20">{{ err }}</div>
+                                {% endfor %}
+                            {% endfor %}
+
+
+
+                                {{ form.hidden_tag() }}
+
+                          <div class="form-table form-table--with-spacing" >
+
+                                <div class="form-group row{% if form.name.errors %} has-error {% endif %}">
+
+                                    {{ form.name.label(class_='col-md-3 control-label form-field__label') }}
+                                    <div class="col-md-9">
+                                        {{ form.name(class_='form-control form-field__input') }}
+                                    </div>
+                                </div>
+
+                          </div>
+
+                          <div class="form-table form-table--with-spacing" >
+                            <div class="form-group row{% if form.biographic.errors %} has-error {% endif %}">
+
+                                {{ form.biographic.label(class_='col-md-3 control-label form-field__label') }}
+                                <div class="col-md-9">
+                                    {{ form.biographic(class_='form-control form-field__textarea') }}
+                                </div>
+                            </div>
+                          </div>
+
+                          <div class="form-table form-table--with-spacing" >
+                            <div class="form-group row{% if form.adresse.errors %} has-error {% endif %}">
+
+                                {{ form.adresse.label(class_='col-md-3 control-label form-field__label') }}
+                                <div class="col-md-9">
+                                    {{ form.adresse(class_='form-control form-field__input') }}
+                                </div>
+                            </div>
+                            <div class="form-group row{% if form.ville.errors %} has-error {% endif %}">
+
+                                {{ form.ville.label(class_='col-md-3 control-label form-field__label') }}
+                                <div class="col-md-9">
+                                    {{ form.ville(class_='form-control form-field__input') }}
+                                </div>
+                            </div>
+
+                          </div>
+
+                          <div class="form-table form-table--with-spacing" >
+                            <div class="form-group row{% if form.email.errors %} has-error {% endif %}">
+
+                                {{ form.email.label(class_='col-md-3 control-label form-field__label') }}
+                                <div class="col-md-9">
+                                    {{ form.email(class_='form-control form-field__input') }}
+                                </div>
+                            </div>
+                            <div class="form-group row{% if form.phone.errors %} has-error {% endif %}">
+
+                                {{ form.phone.label(class_='col-md-3 control-label form-field__label') }}
+                                <div class="col-md-9">
+                                    {{ form.phone(class_='form-control form-field__input numeric', **{ 'data-a-sep': " ", 'data-v-min': "0", 'data-v-max': "999999999999"  }) }}
+                                </div>
+                            </div>
+                          </div>
+
+
+                </div>
+                     </form>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

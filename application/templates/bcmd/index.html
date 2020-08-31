@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% set active_page = "stock" %}
+{% set submenu = "bcmd" %}
+{% set title = 'Bons de commande' %}
+
+{% block title %} {{ super() }} {{ title }} {% endblock %}
+{% block breadcrumb_header %} {{ title }} {% endblock %}
+
+
+{% block layout_content %}
+
+    <div class="row">
+        <div class="col-lg-2">
+            {% include 'includes/nav_document.html' %}
+        </div>
+        <div class="col-lg-10">
+            {% include 'includes/flash_message.html' %}
+
+            <div id="card_bcmd" class="card card-transparent" data-edit="{{ url_for('bcmd.edit') }}" data-list="{{ url_for('api_bcmd.index', compte_id=compte.id) }}">
+
+            </div>
+
+        </div>
+    </div>
+
+{% endblock %}

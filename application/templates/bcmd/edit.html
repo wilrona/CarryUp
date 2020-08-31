@@ -1,0 +1,137 @@
+{% extends 'base.html' %}
+
+{% set active_page = "stock" %}
+{% set submenu = "bcmd" %}
+{% set title = 'Editer bon de commande' %}
+
+{% block title %} {{ super() }} {{ title }} {% endblock %}
+{% block breadcrumb_header %} {{ title }} {% endblock %}
+
+{% block layout_content %}
+
+    <div class="row">
+        <div class="col-lg-2">
+            {% include 'includes/nav_document.html' %}
+        </div>
+        <div class="col-md-8">
+          <div class="sticky-top padding-10 bg-white">
+              <ul class="nav justify-content-end">
+                  <li class="nav-item">
+                    {% if data_id %}
+                      <a class="btn btn-secondary btn-xs" href="{{ url_for('bcmd.view', data_id=data_id) }}">Retour</a>
+                    {% else %}
+                      <a class="btn btn-secondary btn-xs" href="{{ url_for('bcmd.index') }}">Annuler</a>
+                    {% endif %}
+                  </li>
+                  <li class="nav-item">
+                      <a href="#" class="btn btn-primary submitItem btn-xs" id='submitItem'>
+                          Enregistrer
+                      </a>
+                  </li>
+              </ul>
+          </div>
+
+
+          <div class="card card-transparent form-fieldset">
+              <form method="post" action=""  class="form-horizontal" autocomplete="off" id="submitForm">
+                <div class="card-body no-padding">
+
+                  <div class="lead m-b-20 m-t-10">
+                      Details
+                  </div>
+
+                  {% for fielName, errorMessages in form.errors.items() %}
+                      {% for err in errorMessages %}
+                          <div class="col-md-12 error m-b-20">{{ err }}</div>
+                      {% endfor %}
+                  {% endfor %}
+
+                  {{ form.hidden_tag() }}
+
+                  <div class="form-table form-table--with-spacing" >
+                    <div class="form-group row form-group-default-select2{% if form.fournisseur.errors %} has-error {% endif %}">
+
+                        {{ form.fournisseur.label(class_='col-md-3 control-label form-field__label') }}
+                        <div class="col-md-9">
+                          {{ form.fournisseur(class_='form-control full-width form-field__input', **{ 'data-init-plugin':'select2'}) }}
+
+
+                        </div>
+                    </div>
+
+                    <div class="form-group row form-group-default-select2{% if form.magasin_origine.errors %} has-error {% endif %}">
+
+                        {{ form.magasin_origine.label('Point de vente',class_='col-md-3 control-label form-field__label') }}
+                        <div class="col-md-9">
+                          {{ form.magasin_origine(class_='form-control full-width form-field__input', **{ 'data-init-plugin':'select2'}) }}
+
+
+                        </div>
+                    </div>
+                  </div>
+
+
+                  <div class="form-table form-table--with-spacing" >
+                    <div class="form-group row{% if form.date_bon.errors %} has-error {% endif %}">
+
+                        {{ form.date_bon.label(class_='col-md-3 control-label form-field__label') }}
+                        <div class="col-md-9">
+                            {{ form.date_bon(class_='form-control form-field__input', **{ 'id': 'datepicker_start'}) }}
+                        </div>
+                    </div>
+                    <div class="form-group row{% if form.date_prevu_bon.errors %} has-error {% endif %}">
+
+                        {{ form.date_prevu_bon.label(class_='col-md-3 control-label form-field__label') }}
+                        <div class="col-md-9">
+                            {{ form.date_prevu_bon(class_='form-control form-field__input', **{ 'id': 'datepicker_end'}) }}
+                        </div>
+                    </div>
+                  </div>
+
+                  <!-- dataSelect : le lien de la liste des elements qui seront selectionne a savoir les articles (produit fini) et les matiere premiere  -->
+                  <!-- dataCheck : le lien de la recherche des informations dont nous aurons besoin a afficher a la selection d'un article  -->
+                  <!--  dataCurrent: le lien  pour afficher les elements courants  -->
+                  <div id="card_ligne"
+                      data-id="{% if data_id %}{{data_id}}{% endif %}"
+                      dataSelect={{ url_for('api_bcmd.allArticle',  compte_id=compte.id) }}
+                      dataCheck={{ url_for('api_bcmd.check') }}
+                      dataCurrent={{ url_for('api_bcmd.ligne', compte_id=compte.id, item_id=data_id) }} />
+                  </div>
+
+
+
+
+
+
+                </div>
+              </form>
+
+          </div>
+
+        </div>
+    </div>
+
+
+{% endblock %}
+
+{% block footer_script %}
+
+    <script>
+        $(document).ready(function() {
+
+            $('#submitItem').on('click', function(e){
+              e.preventDefault();
+              $.each($('.numeric_dec'), function(){
+                $curVal = $(this).val();
+                $curVal = $curVal.split(' ');
+                $curVal = $curVal.join('');
+                $(this).val($curVal);
+              })
+              $('#submitForm').submit();
+            });
+
+        });
+
+      </script>
+
+{% endblock %}

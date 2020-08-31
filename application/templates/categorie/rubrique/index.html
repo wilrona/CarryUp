@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% set active_page = "article" %}
+{% set submenu = "rubrique" %}
+{% set title = 'Categorie matiere 1ere' %}
+
+{% block title %} {{ super() }} {{ title }} {% endblock %}
+{% block breadcrumb_header %} {{ title }} {% endblock %}
+
+{% block layout_content %}
+<div class="row">
+    <div class="col-lg-2">
+        {% include 'includes/nav_article.html' %}
+    </div>
+    <div class="col-lg-10">
+        {% include 'includes/flash_message.html' %}
+
+        <div id="card_rubrique" class="card card-transparent" data-edit="{{ url_for('rub.edit') }}" data-list="{{ url_for('api_mp.groupe', compte_id=compte.id) }}">
+
+        </div>
+
+    </div>
+</div>
+
+{% endblock %}

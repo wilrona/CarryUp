@@ -1,0 +1,406 @@
+{% extends 'base.html' %}
+
+{% set active_page = "employe" %}
+{% set submenu = "repertoire" %}
+{% set title = 'Editer un employe' %}
+
+{% block title %} {{ super() }} {{ title }} {% endblock %}
+{% block breadcrumb_header %} {{ title }} {% endblock %}
+
+
+
+{% block layout_content %}
+
+    <div class="row">
+        <div class="col-md-2">
+            {% include 'includes/nav_user.html' %}
+        </div>
+        <div class="col-md-8">
+            <div class="sticky-top m-b-20 padding-10">
+                <ul class="nav justify-content-end">
+
+
+                    <li class="nav-item">
+                        <a class="btn btn-secondary btn-xs" href="{{ url_for('user.index') }}">
+                            Annuler
+                        </a>
+                    </li>
+                    {% if data.id and not data.admin_compte %}
+                      <li class="nav-item">
+
+                          {% if data.activated  %}
+                          <a class="btn btn-danger btn-xs" href="{{ url_for('user.active', data_id=data.id) }}"> Desactiver </a>
+                          {% else %}
+                          <a class="btn btn-succes btn-xs" href="{{ url_for('user.active', data_id=data.id) }}"> Activer </a>
+                          {% endif %}
+
+
+                      </li>
+                      {% endif %}
+                    <li class="nav-item">
+                        <a href="#" class="btn btn-primary submit btn-xs">
+                            Enregistrer
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            {% include 'includes/flash_message.html' %}
+            <div class="card card-transparent form-fieldset">
+
+                <div class="card-body no-padding">
+                      <form method="post" action=""  class="form-horizontal" autocomplete="off" id="submitForm">
+                                <div class="lead m-b-20 m-t-10">
+                                    {{ title }}
+                                </div>
+
+                                {% for fielName, errorMessages in form.errors.items() %}
+                                    {% for err in errorMessages %}
+                                        <div class="col-md-12 error m-b-20">{{ err }}</div>
+                                    {% endfor %}
+                                {% endfor %}
+
+                                {{ form.hidden_tag() }}
+
+                                <div class="form-table form-table--with-spacing" >
+
+                                      <div class="form-group row{% if form.first_name.errors %} has-error {% endif %}">
+
+                                          {{ form.first_name.label(class_='col-md-3 control-label form-field__label') }}
+                                          <div class="col-md-9">
+                                              {{ form.first_name(class_='form-control form-field__input') }}
+                                          </div>
+                                      </div>
+                                      <div class="form-group row{% if form.last_name.errors %} has-error {% endif %}">
+
+                                          {{ form.last_name.label(class_='col-md-3 control-label form-field__label') }}
+                                          <div class="col-md-9">
+                                              {{ form.last_name(class_='form-control form-field__input') }}
+                                          </div>
+                                      </div>
+
+                                </div>
+                                <div class="form-table form-table--with-spacing" >
+
+                                      <div class="form-group row{% if form.phone.errors %} has-error {% endif %}">
+
+                                          {{ form.phone.label(class_='col-md-3 control-label form-field__label') }}
+                                          <div class="col-md-9">
+                                              {{ form.phone(class_='form-control form-field__input numeric', **{ 'data-a-sep': " ", 'data-v-min': "0", 'data-v-max': "999999999999"  }) }}
+                                          </div>
+                                      </div>
+                                      <div class="form-group row{% if form.email.errors %} has-error {% endif %}">
+
+                                          {{ form.email.label(class_='col-md-3 control-label form-field__label') }}
+                                          <div class="col-md-9">
+                                              {{ form.email(class_='form-control form-field__input') }}
+                                          </div>
+                                      </div>
+
+                                </div>
+
+                                <div class="form-table form-table--with-spacing" >
+                                  <div class="form-group row form-group-default-select2{% if form.categorie.errors %} has-error {% endif %}">
+
+                                      {{ form.categorie.label(class_='col-md-3 control-label form-field__label') }}
+                                      <div class="col-md-9 select_multiple">
+                                        {% if data.id %}
+                                            {% if not data.admin_compte %}
+                                                  {{ form.categorie(class_='form-control full-width form-field__input', **{'data-placeholder': "Departement associe a l'employe", 'data-init-plugin':'select2'}) }}
+                                            {% else %}
+                                                  {{ form.categorie(class_='form-control full-width form-field__input', **{'data-placeholder': "Departement associe a l'employe", 'data-init-plugin':'select2', 'disabled': 'disabled'}) }}
+                                            {% endif %}
+                                        {% else %}
+                                                  {{ form.categorie(class_='form-control full-width form-field__input', **{'data-placeholder': "Departement associe a l'employe", 'data-init-plugin':'select2'}) }}
+                                        {% endif %}
+
+                                      </div>
+                                  </div>
+                                  <div class="form-group row form-group-default-select2{% if form.appareil.errors %} has-error {% endif %}">
+
+                                      {{ form.appareil.label(class_='col-md-3 control-label form-field__label') }}
+                                      <div class="col-md-9 select_multiple">
+                                        {% if data.id %}
+                                            {% if not data.admin_compte %}
+                                                  {{ form.appareil(class_='form-control full-width form-field__input', **{'data-placeholder': "Tout les appareils", 'data-init-plugin':'select2'}) }}
+                                            {% else %}
+                                                  {{ form.appareil(class_='form-control full-width form-field__input', **{'data-placeholder': "Tout les appareils", 'data-init-plugin':'select2', 'disabled': 'disabled'}) }}
+                                            {% endif %}
+                                        {% else %}
+                                                  {{ form.appareil(class_='form-control full-width form-field__input', **{'data-placeholder': "Tout les appareils", 'data-init-plugin':'select2'}) }}
+                                        {% endif %}
+
+                                      </div>
+                                  </div>
+                                </div>
+                      </form>
+
+
+
+                      {% if data.id %}
+
+                            <div class="lead m-b-20  m-t-50">
+                                Autorisation et code d'acces
+                            </div>
+
+                            <div id="card_pinUser" data-pin="{{ data.pin|space_string }}" data-urlCheckPin='{{ url_for('user.pin', data_id=data.id, _external=True) }}' data-urlSavePin={{ url_for('user.savepin', data_id=data.id, _external=True) }}>
+
+                            </div>
+
+                            <div class="alert alert-success hidden" id="alert-acces" role="alert">
+                                <button class="close" data-dismiss="alert"></button>
+                                <span id="text-alert"></span>
+                            </div>
+
+                            <form action="" method="post" id="form_acces">
+
+                            <div class="card-group horizontal" id="accordion" role="tablist" aria-multiselectable="true">
+                                {% for module in list_roles %}
+                                <div class="card card-transparent m-b-0">
+                                    <div class="card-header card-header-accordion" role="tab" id="{{ module['valeur'] }}">
+                                        <h4 class="card-title">
+                                            <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                                {{ module['module'] }}
+                                            </a>
+                                        </h4>
+                                    </div>
+                                    <div id="collapseOne" class="collapse show" role="tabcard" aria-labelledby="{{ module['valeur'] }}">
+                                        <div class="card-body no-padding">
+                                            <table class="table table-sm">
+                                                <thead>
+                                                    <tr>
+                                                        <th>{{ module['module'] }}</th>
+                                                        <th style="width: 20%">
+                                                            <input type="checkbox" class="switchery" name="module" value="{{ module['valeur'] }}" {% if data.admin_compte %} checked disabled {% else %} {% if data.access_admin %} checked {% endif %} {% endif %}  />
+                                                        </th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+
+                                                    <tr >
+                                                        <td colspan="2" class="no-padding">
+                                                            <ul class="list-group list-group-flush">
+                                                                {% for role in module['role']  %}
+                                                                    <li class="list-group-item no-padding list-group-item-secondary p-l-10">
+                                                                        <div class="checkbox check-success">
+                                                                            <input type="checkbox" class="role" name="role" value="{{ role['valeur'] }}" id="{{ role['valeur'] }}" data-module="{{ module['valeur'] }}" {% if data.admin_compte %} checked disabled {% else %} {% if role['valeur'] in data.roles %} checked {% endif %}  {% endif %}>
+                                                                            <label for="{{ role['valeur'] }}">{{ role['titre'] }}</label>
+                                                                        </div>
+                                                                    </li>
+                                                                    {% if role['role'] %}
+                                                                        <ul class="list-group list-group-flush m-l-20 m-t-5">
+                                                                            {% for subrole in role['role'] %}
+                                                                                <li class="list-group-item no-padding {% if subrole['role'] %} list-group-item-secondary p-l-10 {% endif %}">
+                                                                                    <div class="checkbox check-success">
+                                                                                        <input type="checkbox" class="role" name="role" value="{{ subrole['valeur'] }}" id="{{ subrole['valeur'] }}" data-directparent="{{ role['valeur'] }}" data-parent="{{ role['valeur'] }}" data-module="{{ module['valeur'] }}" {% if data.admin_compte %} checked disabled {% else %} {% if subrole['valeur'] in data.roles %} checked {% endif %} {% endif %}>
+                                                                                        <label for="{{ subrole['valeur'] }}">{{ subrole['titre'] }}</label>
+                                                                                    </div>
+                                                                                </li>
+                                                                                {% if subrole['role'] %}
+                                                                                    <ul class="list-group list-group-flush m-l-20 m-t-5">
+                                                                                        {% for subrole_1 in subrole['role'] %}
+                                                                                            <li class="list-group-item no-padding">
+                                                                                                <div class="checkbox check-success">
+                                                                                                    <input type="checkbox" class="role" name="role" value="{{ subrole_1['valeur'] }}" id="{{ subrole_1['valeur'] }}" {% if data.admin_compte %} checked disabled {% else %} {% if subrole_1['valeur'] in data.roles %} checked {% endif %}{% endif %} data-parent="{{ role['valeur'] }}" data-subparent="{{ subrole['valeur'] }}" data-module="{{ module['valeur'] }}">
+                                                                                                    <label for="{{ subrole_1['valeur'] }}">{{ subrole_1['titre'] }}</label>
+                                                                                                </div>
+                                                                                            </li>
+                                                                                        {% endfor %}
+                                                                                    </ul>
+                                                                                {% endif %}
+                                                                            {% endfor %}
+                                                                        </ul>
+                                                                    {% endif %}
+                                                                {% endfor %}
+                                                            </ul>
+                                                        </td>
+                                                    </tr>
+
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            </div>
+                            </form>
+
+                            <div class="card-footer text-right">
+                                <button class="btn btn-primary" type="button" id="submit_acces">Enregistrer les droits d'accès</button>
+                            </div>
+
+                      {% endif %}
+
+                </div>
+
+            </div>
+
+
+
+
+
+        </div>
+
+    </div>
+
+
+{% endblock %}
+
+{% block footer_script %}
+    <script>
+
+        {% if data.id %}
+
+        $.each($("input[type='checkbox'].switchery"), function(){
+            var $name = $(this).val();
+
+            if($(this).prop('checked') === false){
+                $.each($("input[type='checkbox']"), function () {
+                    if($(this).data('module') === $name){
+                        $(this).prop('disabled', true);
+                    }
+                })
+            }
+        });
+
+
+        $(document).ready(function() {
+
+
+
+            $('.switchery').on('click', function(){
+                var $unput = $(this).parent().find("input[type='checkbox'].switchery");
+                var $name = $unput.val();
+
+                if($unput.prop('checked') === true){
+                    $.each($("input[type='checkbox'].role"), function () {
+                        if($(this).data('module') === $name){
+                            $(this).prop('disabled', false)
+                        }
+                    })
+                }else {
+                    $.each($("input[type='checkbox'].role"), function () {
+                        if($(this).data('module') === $name){
+                            $(this).prop('disabled', true)
+                        }
+                    })
+                }
+            });
+
+
+            $("input[type='checkbox'].role").on('change', function(){
+
+                var $name = $(this).attr('id');
+
+                if($(this).data('parent') || $(this).data('subparent')){
+
+                    if($(this).prop('checked') === true){
+                        if($(this).data('parent')){
+                            $("input[type='checkbox']#"+$(this).data('parent')).prop('checked', true)
+                        }
+
+                        if($(this).data('subparent')) {
+                            $("input[type='checkbox']#" + $(this).data('subparent')).prop('checked', true)
+                        }
+
+                        $.each($("input[type='checkbox']"), function () {
+                            if($(this).data('parent') === $name){
+                                $(this).prop('checked', true)
+                            }
+
+                            if($(this).data('subparent') === $name){
+                                $(this).prop('checked', true)
+                            }
+                        })
+
+                    }else {
+                        if($(this).data('directparent')){
+                            if($("input:checked[data-directparent='"+$(this).data('directparent')+"']").length === 0){
+                                console.log('ok');
+                                $("input[type='checkbox']#" + $(this).data('directparent')).prop('checked', false);
+                            }
+                        }
+
+                        if($(this).data('subparent')) {
+                            if($("input:checked[data-subparent='"+$(this).data('subparent')+"']").length === 0){
+                                $("input[type='checkbox']#" + $(this).data('subparent')).prop('checked', false);
+                                $parentdirect = $("input[type='checkbox']#" + $(this).data('subparent')).data('directparent');
+                                if($("input:checked[data-directparent='"+$parentdirect+"']").length === 0){
+                                    console.log('oki');
+                                    $("input[type='checkbox']#" + $parentdirect).prop('checked', false);
+                                }
+                            }
+                        }
+
+                        $.each($("input[type='checkbox']"), function () {
+                            if($(this).data('parent') === $name){
+                                $(this).prop('checked', false)
+                            }
+
+                            if($(this).data('subparent') === $name){
+                                $(this).prop('checked', false)
+                            }
+                        })
+                    }
+                }else{
+                    if($(this).prop('checked') === true){
+                        $.each($("input[type='checkbox']"), function () {
+                            if($(this).data('parent') === $name){
+                                $(this).prop('checked', true)
+                            }
+
+                            if($(this).data('subparent') === $name){
+                                $(this).prop('checked', true)
+                            }
+                        })
+                    }else {
+                        $.each($("input[type='checkbox']"), function () {
+                            if($(this).data('parent') === $name){
+                                $(this).prop('checked', false)
+                            }
+
+                            if($(this).data('subparent') === $name){
+                                $(this).prop('checked', false)
+                            }
+                        })
+                    }
+                }
+
+
+            });
+
+            $('#submit_acces').on('click', function(e){
+                e.preventDefault;
+                var $current = $(this);
+
+                $current.prop('disabled', true);
+
+                $.ajax({
+                    method: "POST",
+                    data: $('#form_acces').serialize(),
+                    url: "{{ url_for('user.saverole', data_id=data.id) }}",
+                }).done(function( msg ) {
+
+                    msg = $.parseJSON(msg)[0]
+
+                    if(msg['statut'] === 'OK'){
+                        $('#alert-acces').removeClass('alert-danger').addClass('alert-success').removeClass('hidden');
+                        $('#text-alert').html(msg['message'])
+                    }else{
+                        $('#alert-acces').removeClass('alert-success').addClass('alert-danger').removeClass('hidden');
+                        $('#text-alert').html(msg['message'])
+                    }
+
+                    $current.prop('disabled', false);
+
+                });
+
+            })
+
+
+
+        });
+
+        {% endif %}
+
+    </script>
+{% endblock %}

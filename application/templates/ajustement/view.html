@@ -1,0 +1,211 @@
+{% extends 'base.html' %}
+
+{% set active_page = "stock" %}
+{% set submenu = "ajustement" %}
+{% set title = 'Details ajustement de stock' %}
+
+{% block title %} {{ super() }} {{ title }} {% endblock %}
+{% block breadcrumb_header %} {{ title }} {% endblock %}
+
+{% block layout_content %}
+
+    <div class="row">
+      <div class="col-lg-2">
+          {% include 'includes/nav_document.html' %}
+      </div>
+        <div class="col-md-8">
+
+          <div class="sticky-top padding-10 bg-white">
+              <ul class="nav justify-content-end">
+                  <li class="nav-item">
+                      <a href="{{ url_for('ajustement.index') }}" class="btn btn-default">Retour</a>
+                  </li>
+                  <li class="nav-item m-l-20">
+                      <a id="card-settings" class="btn dropdown-toggle" data-target="#" href="#" data-toggle="dropdown" aria-haspopup="true" role="button" aria-expanded="false">
+                        <i class="pg-menu_lv"></i>
+                      </a>
+                      <div class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="card-settings">
+                            <a href="" class="dropdown-item">Annuler</a>
+                      </div>
+                  </li>
+              </ul>
+          </div>
+
+          {% include 'includes/flash_message.html' %}
+
+          <div class="card card-transparent form-fieldset">
+              <form method="post" action=""  class="form-horizontal" autocomplete="off" id="submitForm">
+                <div class="card-body no-padding">
+
+                  <div class="lead m-b-20 m-t-10">
+                      Details
+                  </div>
+
+
+                  <div class="form-table form-table--with-spacing" >
+                    <div class="form-group row">
+                      <label class="col-md-3 control-label form-field__label">Reference</label>
+                      <div class="col-md-9 form-field__content">
+                        <span class="form-link--with-spacing">{{ data.reference }}</span>
+                      </div>
+                    </div>
+
+                  </div>
+
+                  <div class="row padding-10">
+                    <div class="col-md-6">
+                      Motif d'ajustement :<b>
+                        {% if data.etat == 0 %}
+                            Stock recu
+                        {% endif %}
+                        {% if data.etat == 1 %}
+                            Recomptage
+                        {% endif %}
+                        {% if data.etat == 2 %}
+                            Dommage
+                        {% endif %}
+                        {% if data.etat == 3 %}
+                            Vol
+                        {% endif %}
+                        {% if data.etat == 4 %}
+                            Perte
+                        {% endif %}
+                        {% if data.etat == 5 %}
+                            Don
+                        {% endif %}
+                      </b>
+                    </div>
+                    <div class="col-md-6">
+
+
+
+                    </div>
+                  </div>
+
+                  <div class="form-table form-table--with-spacing" >
+                    <div class="form-group row">
+                      {{ form.magasin_origine.label(class_='col-md-3 control-label form-field__label') }}
+                      <div class="col-md-9 form-field__content">
+                        <input type="text" value="{{ data.magasin_origine.name }}" readonly class="form-control-plaintext full-width form-field__input">
+                      </div>
+                    </div>
+
+                  </div>
+
+                  <div class="form-table form-table--with-spacing" >
+                    <div class="form-group row">
+                      {{ form.date_bon.label(class_='col-md-3 control-label form-field__label') }}
+                      <div class="col-md-9 form-field__content">
+                        <input type="text" value="{{ data.date_bon|format_date('%d/%m/%Y') }}" readonly class="form-control-plaintext full-width form-field__input">
+                      </div>
+                    </div>
+
+                  </div>
+
+                  <div class="lead m-b-20 m-t-50">
+                      Liste des articles
+                  </div>
+
+                  <div class="mh-370">
+
+                        <table class="table">
+                          <thead>
+                            <tr>
+                              <th style="width: 40%">Articles</th>
+                              <th class="text-right" style="width : 20%">En stock</th>
+                              <th class="text-right" style="width : 20%">Rajustement</th>
+                              <th class="text-right" style="width : 20%" >Nouveau Stock</th>
+                            </tr>
+                          </thead>
+                        </table>
+
+
+                        {% for item_list in data.ligne_data %}
+                          <table class="table table-line table-condensed articles-lines">
+                            <tbody>
+                                <tr>
+                                  <td style="width: 40%">
+                                    {{ item_list.article_id.name }} -
+                                    <small>{{ item_list.variante_id.name }}</small>
+                                  </td>
+                                  <td class="text-right" style="width : 20%">
+                                    {{ item_list.old_stock }}
+                                  </td>
+                                  <td class="text-right" style="width : 20%">
+                                    {{ item_list.quantite }}
+                                  </td>
+                                  <td class="text-right" style="width : 20%">
+                                    {{ item_list.old_stock + item_list.quantite }}
+                                  </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                      {% endfor %}
+
+                </div>
+
+
+              </form>
+          </div>
+
+        </div>
+    </div>
+
+
+{% endblock %}
+
+{% block footer_script %}
+
+    <script type="text/javascript">
+
+        var refreshTotal = function refresh_total(){
+
+          $montant_total = 0;
+
+          $.each($('.montant'), function(){
+              $content = $(this).text();
+
+              $remove_decimal = $content.split(',');
+              $split_space = $remove_decimal[0].split(' ');
+
+              $content = $split_space.join('');
+
+              $montant_total += parseInt($content);
+          });
+
+          $('.montant_total').text($.number(parseInt($montant_total), 2, ',', ' '))
+
+        }
+
+
+        var initLigne = function initLigne(){
+
+          $.each($('.quantite'), function(){
+            var  $val = $(this);
+
+            var $prix = $val.next();
+            var montant = $val.parent().find('.montant');
+
+            $prix_val = $prix.text().split(" ");
+            $prix_val = $prix_val.join('');
+
+            $qte = $val.text().split(" ");
+            $qte = $qte.join('');
+            var $current_montant = parseInt($qte) * parseInt($prix_val);
+            montant.text($.number(parseInt($current_montant), 2, ',',' '));
+          });
+
+          refreshTotal();
+
+        }
+
+        $(document).ready(function() {
+
+              initLigne(); // initialisation des lignes de la commande
+
+        });
+
+
+        </script>
+
+{% endblock %}

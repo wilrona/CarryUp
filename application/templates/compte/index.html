@@ -1,0 +1,141 @@
+{% extends 'base.html' %}
+
+{% set active_page = "parametre" %}
+{% set submenu = "compte" %}
+{% set title = 'Compte' %}
+
+{% block title %} {{ super() }} {{ title }} {% endblock %}
+{% block breadcrumb_header %} {{ title }} {% endblock %}
+
+
+{% block layout_content %}
+
+    <div class="row">
+
+        <div class="col-sm-2">
+            {% include 'includes/nav_param.html' %}
+        </div>
+        <div class="col-sm-8">
+            <div class="sticky-top m-b-20 padding-10 bg-white">
+                <ul class="nav justify-content-end">
+                    <li class="nav-item">
+                        <a href="#" class="btn btn-primary submit btn-xs">Modifier</a>
+                    </li>
+                </ul>
+            </div>
+            {% include 'includes/flash_message.html' %}
+            <div id="card-advance" class="card card-transparent form-fieldset">
+                <form method="post" action="" class="form-horizontal" autocomplete="off" id="submitForm">
+                    <div class="card-body no-padding">
+
+                            {{ form.hidden_tag() }}
+                            <div class="lead m-b-20 m-t-10">
+                                Information personnelle
+                            </div>
+                            {% for fielName, errorMessages in form.errors.items() %}
+                                {% for err in errorMessages %}
+                                    <div class="col-md-12 error">{{ err }}</div>
+                                {% endfor %}
+                            {% endfor %}
+
+                            <div class="form-table form-table--with-spacing">
+                                <div class="form-group row{% if form.nameCompagny.errors %} has-error {% endif %}">
+
+                                    {{ form.nameCompagny.label(class_='col-md-3 control-label form-field__label') }}
+                                    <div class="col-md-9">
+                                        {{ form.nameCompagny(class_='form-control form-field__input') }}
+                                    </div>
+                                </div>
+                                <div class="form-group row{% if form.notification_email.errors %} has-error {% endif %}">
+
+                                    {{ form.notification_email.label(class_='col-md-3 control-label form-field__label') }}
+                                    <div class="col-md-9">
+                                        {{ form.notification_email(class_='form-control form-field__input') }}
+                                    </div>
+                                </div>
+                                <div class="form-group row{% if form.phone.errors %} has-error {% endif %}">
+
+                                    {{ form.phone.label(class_='col-md-3 control-label form-field__label') }}
+                                    <div class="col-md-9">
+                                        {{ form.phone(class_='form-control form-field__input numeric', **{ 'data-a-sep': " ", 'data-v-min': "0", 'data-v-max': "999999999999"  }) }}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-table form-table--with-spacing">
+                                <div class="form-group row{% if form.adresse_un.errors %} has-error {% endif %}">
+                                    {{ form.adresse_un.label(class_='col-md-3 control-label form-field__label') }}
+                                    <div class="col-md-9">
+                                        {{ form.adresse_un(class_='form-control form-field__input') }}
+                                    </div>
+                                </div>
+                                <div class="form-group row{% if form.adresse_deux.errors %} has-error {% endif %}">
+                                    {{ form.adresse_deux.label(class_='col-md-3 control-label form-field__label') }}
+                                    <div class="col-md-9">
+                                        {{ form.adresse_deux(class_='form-control form-field__input') }}
+                                    </div>
+                                </div>
+                                <div class="form-group row{% if form.ville.errors %} has-error {% endif %}">
+                                    {{ form.ville.label(class_='col-md-3 control-label form-field__label') }}
+                                    <div class="col-md-9">
+                                        {{ form.ville(class_='form-control form-field__input') }}
+                                    </div>
+                                </div>
+                                <div class="form-group row form-group-default-select2{% if form.pays.errors %} has-error {% endif %}">
+                                    {{ form.pays.label(class_='col-md-3 control-label form-field__label') }}
+                                    <div class="col-md-9">
+                                        <select name="pays" class="full-width form-field__input" data-placeholder="Pays de residence de l'entreprise" data-init-plugin="select2">
+                                            <option value=""></option>
+                                            {% for pays in pays_list %}
+                                                <option value="{{ pays.alpha_2 }}" {% if form.pays.data == pays.alpha_2 %} selected {% endif %}>{{ pays.name }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-table form-table--with-spacing">
+                            <div class="form-group row{% if form.siteweb.errors %} has-error {% endif %}">
+                                {{ form.siteweb.label(class_='col-md-3 control-label form-field__label') }}
+                                <div class="col-md-9">
+                                    {{ form.siteweb(class_='form-control form-field__input') }}
+                                </div>
+                            </div>
+                            <div class="form-group row{% if form.facebook_link.errors %} has-error {% endif %}">
+                                {{ form.facebook_link.label(class_='col-md-3 control-label form-field__label') }}
+                                <div class="col-md-9">
+                                    {{ form.facebook_link(class_='form-control form-field__input') }}
+                                </div>
+                            </div>
+                            <div class="form-group row{% if form.twitter_link.errors %} has-error {% endif %}">
+                                    {{ form.twitter_link.label(class_='col-md-3 control-label form-field__label') }}
+                                    <div class="col-md-9">
+                                        {{ form.twitter_link(class_='form-control form-field__input') }}
+                                    </div>
+                            </div>
+                            <div class="form-group row{% if form.instagramm.errors %} has-error {% endif %}">
+                                {{ form.instagramm.label(class_='col-md-3 control-label form-field__label') }}
+                                <div class="col-md-9">
+                                    {{ form.instagramm(class_='form-control form-field__input') }}
+                                </div>
+                            </div>
+                            <div class="form-group row{% if form.devise.errors %} has-error {% endif %}">
+                                {{ form.devise.label(class_='col-md-3 control-label form-field__label') }}
+                                <div class="col-md-9">
+                                    {{ form.devise(class_='form-control form-field__input') }}
+                                </div>
+                            </div>
+
+                        </div>
+
+
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+
+
+
+{% endblock %}

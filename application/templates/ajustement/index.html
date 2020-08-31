@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% set active_page = "stock" %}
+{% set submenu = "ajustement" %}
+{% set title = 'Ajustements de stock' %}
+
+{% block title %} {{ super() }} {{ title }} {% endblock %}
+{% block breadcrumb_header %} {{ title }} {% endblock %}
+
+{% block layout_content %}
+
+    <div class="row">
+        <div class="col-lg-2">
+            {% include 'includes/nav_document.html' %}
+        </div>
+        <div class="col-lg-10">
+            {% include 'includes/flash_message.html' %}
+
+            <div id="card_ajustement" class="card card-transparent" data-edit="{{ url_for('ajustement.edit') }}" data-list="{{ url_for('api_ajust.index', compte_id=compte.id) }}">
+
+            </div>
+
+        </div>
+    </div>
+
+{% endblock %}

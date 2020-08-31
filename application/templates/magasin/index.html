@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% set active_page = "parametre" %}
+{% set submenu = "magasin" %}
+{% set title = 'Point de vente' %}
+
+{% block title %} {{ super() }} {{ title }} {% endblock %}
+{% block breadcrumb_header %} {{ title }} {% endblock %}
+
+{% block layout_content %}
+
+    <div class="row">
+        <div class="col-sm-2">
+            {% include 'includes/nav_param.html' %}
+        </div>
+        <div class="col-sm-10">
+            {% include 'includes/flash_message.html' %}
+            <div id="card_magasin" class="card card-transparent" data-edit="{{ url_for('pdv.edit') }}" data-list="{{ url_for('api_pdv.index', compte_id=compte.id) }}">
+
+            </div>
+
+        </div>
+    </div>
+
+{% endblock %}
